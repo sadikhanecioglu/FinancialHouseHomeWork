@@ -7,9 +7,12 @@ from flask_datepicker import datepicker
 
 
 
-def init_application():
+def create_app(config_filename=None):
     app = Flask(__name__)
-    
+    Bootstrap5(app)
+    datepicker(app)
+    if config_filename:
+        app.config.from_pyfile(config_filename)
     app.config['SWAGGER'] = {'title':'FinancalHouse HomeWork'}
     app.config.update(dict(
     SECRET_KEY="FinanceHouse*!2019.2",
@@ -22,7 +25,5 @@ def init_application():
 
 
 if __name__ == '__main__':
-    app = init_application()
-    Bootstrap5(app)
-    datepicker(app)
+    app = create_app()
     app.run(host='0.0.0.0',debug=True)    
