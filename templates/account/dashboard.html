@@ -1,0 +1,83 @@
+{% extends 'layout.html'%} {% block navbar %} {% include "partials/navbar.html" %} {% endblock %} {% block content %}
+<h1>Dashboard</h1>
+<div class="container">
+    <div class="row">
+        <div class="row">
+            <div class="col">
+
+                <div class="row">
+                    <div class="col">
+                        <input type="text" name="startDate" placeholder="please input start date" class="form-control dp" />
+                    </div>
+                    <div class="col">
+                        <input type="text" name="endDate" placeholder="please input end date" class="form-control dp" />
+                    </div>
+                    <div class="col">
+                        <button id="report-button" type="button">Get Data</button>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+
+                <table id="retportTable" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">count</th>
+                            <th scope="col">total</th>
+                            <th scope="col">currency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %} {% block scripts %}
+<script type="text/javascript">
+    var jwt = '{{jwt}}'
+    $(function() {
+        // for home work   Use ajax based fluent approach for transaction query endpoint (optional)
+        // but it's cross exception
+        $("#report-button").bind('click', () => {
+            const fromDate = $('[name="startDate"]').val()
+            const toDate = $('[name="endDate"]').val()
+            fetch('https://reporting.rpdpymnt.com/api/v3/transactions/report', {
+                    method: 'Post',
+                    headers: {
+                        Authorization: jwt
+                    },
+                    body: {
+                        'fromDate': fromDate,
+                        'toDate': toDate
+                    }
+                })
+                .then((response) => response.json())
+                .then((result) => {
+
+                    console.log(result);
+
+                }, (err) => {
+                    alert('process exception ')
+                    console.log(err);
+                })
+
+        })
+
+
+    });
+</script>
+{% endblock %}

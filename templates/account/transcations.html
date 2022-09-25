@@ -1,8 +1,23 @@
-{% extends 'layout.html'%} {% block content %}
+{% extends 'layout.html' %} {% block scripts %} {{ super() }} {{ datepicker.loader() }} {# to load jQuery-ui #} {{ datepicker.picker(id=".dp") }} {% endblock %} {% block navbar %} {% include "partials/navbar.html" %} {% endblock %} {% block content %}
+
 <h1>Transcations</h1>
 <div class="container">
     <div class="row">
         <div class="col">
+            <form action="{{ url_for('account.transcations') }}" class="verticalform" method="post">
+                <div class="row">
+                    <div class="col">
+                        <input type="text" name="startDate" placeholder="please input start date" class="form-control dp" />
+                    </div>
+                    <div class="col">
+                        <input type="text" name="endDate" placeholder="please input end date" class="form-control dp" />
+                    </div>
+                    <div class="col">
+                        <button type="submit">Get Data</button>
+                    </div>
+                </div>
+
+            </form>
 
         </div>
     </div>

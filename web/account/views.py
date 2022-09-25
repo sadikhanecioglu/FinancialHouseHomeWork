@@ -3,9 +3,21 @@ from flask_login import current_user, login_required, login_user, logout_user
 from web.account.forms import LoginForm
 from flask import make_response
 from core.apirequest import ApiRequest
-
+from datetime import datetime,timedelta
 
 account_views = Blueprint('account', __name__)
+
+
+
+
+@account_views.route('/', methods=['GET', 'POST'])
+def dashboard():
+    if request.cookies['JWT']:
+        return render_template("account/dashboard.html",jwt=request.cookies['JWT'])
+    else:
+        return redirect(url_for('account.login'))
+
+
 
 
 @account_views.route('/login', methods=['GET', 'POST'])
@@ -24,9 +36,18 @@ def login():
 
 @account_views.route('/transcations', methods=['GET', 'POST'])
 def transcations():
+    print(request.form)
+    fromDate = (datetime.today() - timedelta(days=30)).strftime('%Y-%m-%d')
+    toDate =  datetime.today()
+    if  'startDate' in request.form:
+        fromDate = request.form['startDate']
+    if 'toDate' in request.form:
+        toDate = request.form['endDate']
+
+    print(fromDate,toDate)        
     if request.cookies['JWT']:
-        result = ApiRequest({'token': request.cookies['JWT']}).post("/api/v3/transaction/list", {"fromDate": "2015-07-01",
-                                                                                                 "toDate": "2015-10-01",
+        result = ApiRequest({'token': request.cookies['JWT']}).post("/api/v3/transaction/list", {"fromDate": fromDate,
+                                                                                                 "toDate": toDate,
                                                                                                  "merchant": 1,
                                                                                                  "acquirer": 1,
 
@@ -67,15 +88,15 @@ def transcations_client(transcation_id):
     print(transcation_id)
     if request.cookies['JWT']:
         result = ApiRequest({'token': request.cookies['JWT']}).post(
-            "/api/v3/transaction", {"transactionId": transcation_id})
+            "/api/v3/client", {"transactionId": transcation_id})
         if result.status_code == 401:
             return redirect(url_for('account.login'))
         print(result)
         if result.status_code == 200:
             data = result.json()
             print(data)
-            return render_template("account/transcations.html", transcationdetail=data)
+            return render_template("account/transcations_client.html", transcationdetail=data)
         else:
-            return render_template("account/transcations.html", error="Error")
+            return render_template("account/transcations_client.html", error="Error")
     else:
         return redirect(url_for('account.login'))    
