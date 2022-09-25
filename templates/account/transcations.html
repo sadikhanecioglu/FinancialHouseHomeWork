@@ -1,0 +1,46 @@
+{% extends 'layout.html'%} {% block content %}
+<h1>Transcations</h1>
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {% if error %}
+            <div class="card">
+                <div class="card-body">
+                    {{error}}
+                </div>
+            </div>
+            {% endif %} {% if transcations %}
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">referenceNo</th>
+                        <th scope="col">name</th>
+                        <th scope="col">status</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for data in transcations.data %}
+                    <tr>
+                        <th scope="row"><a href="{{url_for('account.transcations_detail', transcation_id=transcationdetail.transaction.id)}}">{{data.transaction.merchant.referenceNo}}</a>
+                        </th>
+                        <td>{{"%s - %s"|format(data.customerInfo.billingFirstName,data.customerInfo.billingLastName)}}
+                        </td>
+                        <td>{{data.transaction.merchant.status}}</td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+
+            </table>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

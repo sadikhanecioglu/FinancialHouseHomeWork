@@ -1,0 +1,27 @@
+{% extends 'layout.html'%} {% block content %}
+<h1>Client Detail</h1>
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            {% if error %}
+            <div class="card">
+                <div class="card-body">
+                    {{error}}
+                </div>
+            </div>
+            {% endif %} {% if transcationdetail %}
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{transcationdetail.transaction.merchant.referenceNo}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{transcationdetail.transaction.merchant.status}}</h6>
+                    <p class="card-text">{{transcationdetail.customerInfo.shippingFirstName}}</p>
+
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}
